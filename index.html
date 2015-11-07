@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Cows &amp; Bulls</title>
+	<link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="cows-bulls" class="form-wrapper">
+		<form id="guess-form" v-on="submit: validation">
+			<input v-model="guess" type="text" maxlength="4" value="" />
+			<input type="submit" value="Check" />
+		</form>
+
+		<div id="guess-list" class="guess-list">
+			<p id="guess-remaining" class="guess-remaining">Remaining attempts: <span>{{ remaining }}</span></p>
+			<p class="guess-errors"><span v-if="errors">{{ errors[0] }}</span></p>
+			<ol>
+				<li v-repeat="attempt in attempts"><span>{{ attempt.guess }}</span> &#8211; <span>{{ attempt.cows }}</span> cows, <span>{{ attempt.bulls }}</span> bulls</li>
+				<li v-if="success">Congratulations ! You guessed <span>{{ theNumber }}</span> !</li>
+				<li v-if="failure">Sorry, the number was <span>{{ theNumber }}</span>.</li>
+			</ol>
+		</div>
+	</div>
+
+	<script src="js/vue.min.js" type="text/javascript"></script>
+	<script src="js/app.js" type="text/javascript"></script>
+</body>
+</html>
