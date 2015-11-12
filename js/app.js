@@ -3,15 +3,16 @@ new Vue({
 	el: '#cows-bulls',
 
 	data: {
-		theNumber   : false,
-		numberSplit : [],
-		guess       : '',
-		attempts    : [],
-		errors      : [],
-		maxAttempts : 15,
-		remaining   : null,
-		success     : false,
-		failure     : false
+		theNumber    : false,
+		numberSplit  : [],
+		guess        : '',
+		attempts     : [],
+		errors       : [],
+		maxAttempts  : 15,
+		remaining    : null,
+		success      : false,
+		failure      : false,
+		disableInput : false
 	},
 
 	methods: {
@@ -121,7 +122,8 @@ new Vue({
 			}
 
 			if ( bulls === 4 ) {
-				this.success = true;
+				this.success      = true;
+				this.disableInput = true;
 				return;
 			}
 
@@ -134,7 +136,8 @@ new Vue({
 			this.remaining--;
 
 			if ( this.remaining === 0 ) {
-				this.failure = true;
+				this.failure      = true;
+				this.disableInput = true;
 			}
 		},
 

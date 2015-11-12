@@ -9,8 +9,8 @@
 <body>
 	<div id="cows-bulls" class="form-wrapper">
 		<form id="guess-form" @submit="validation">
-			<input v-model="guess" type="text" maxlength="4" value="" :disabled="success || failure" />
-			<input type="submit" value="Check" :disabled="success || failure" />
+			<input v-model="guess" type="text" maxlength="4" value="" :disabled="disableInput" />
+			<input type="submit" value="Check" :disabled="disableInput" />
 		</form>
 
 		<div id="guess-list" class="guess-list">
