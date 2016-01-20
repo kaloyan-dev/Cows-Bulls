@@ -176,6 +176,8 @@ new Vue({
 		this.theNumber   = this.generateNumber();
 		this.numberSplit = this.theNumber.split( '' );
 		this.remaining   = this.maxAttempts;
+
+		this.$els.guess.focus();
 	}
 	
 });
