@@ -35,7 +35,7 @@ new Vue({
 		},
 
 		generateNumber: function() {
-			var numbersArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+			var numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
 			var slicedArray  = this.shuffle( numbersArray ).slice( 0, 4 );
 
 			return slicedArray.join( '' );
