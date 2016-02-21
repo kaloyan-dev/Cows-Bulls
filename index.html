@@ -7,7 +7,7 @@
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<div id="cows-bulls" class="form-wrapper">
+	<div id="cows-bulls" class="form-wrapper" v-cloak>
 		<form id="guess-form" @submit="validation">
 			<input v-el:guess v-model="guess" type="text" maxlength="4" value="" :disabled="disableInput" />
 			<input type="submit" value="Check" :disabled="disableInput" />
