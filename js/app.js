@@ -1,183 +1,192 @@
-new Vue({
+;( function() {
 
-	el: '#cows-bulls',
+	Vue.directive( 'focus', {
+		bind: function ( el ) {
+			Vue.nextTick( function () {
+				el.focus()
+			} );
+		}
+	});
 
-	data: {
-		theNumber    : false,
-		numberSplit  : [],
-		guess        : '',
-		attempts     : [],
-		errors       : [],
-		maxAttempts  : 15,
-		remaining    : null,
-		success      : false,
-		failure      : false,
-		disableInput : false
-	},
+	new Vue({
 
-	methods: {
-		shuffle: function ( array ) {
-			var counter = array.length;
-			var temp;
-			var index;
+		el: '#cows-bulls',
 
-			while ( counter > 0 ) {
-				index = Math.floor( Math.random() * counter );
-
-				counter--;
-
-				temp           = array[counter];
-				array[counter] = array[index];
-				array[index]   = temp;
-			}
-
-			return array;
+		data: {
+			theNumber    : false,
+			numberSplit  : [],
+			guess        : '',
+			attempts     : [],
+			errors       : [],
+			maxAttempts  : 15,
+			remaining    : null,
+			success      : false,
+			failure      : false,
+			disableInput : false
 		},
 
-		generateNumber: function() {
-			var numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
-			var slicedArray  = this.shuffle( numbersArray ).slice( 0, 4 );
+		methods: {
+			shuffle: function ( array ) {
+				var counter = array.length;
+				var temp;
+				var index;
 
-			return slicedArray.join( '' );
-		},
+				while ( counter > 0 ) {
+					index = Math.floor( Math.random() * counter );
 
-		gameEnded: function() {
-			if ( this.success || this.failure ) {
-				this.guess = '';
-				return true;
-			}
-		},
+					counter--;
 
-		containsNaNs: function( array ) {
-			var numbersOnly = true;
-
-			for ( var i = 0; i < array.length; i++ ) {
-				if ( isNaN( array[i] ) ) {
-					this.errors.push( 'Please enter numbers only.' );
-					numbersOnly = false;
-					break;
-				}
-			}
-
-			return ! numbersOnly;
-		},
-
-		duplicates: function( array ) {
-			var duplicateNumbers = false;
-
-			for ( var i = 0; i < array.length; i++ ) {
-				if ( duplicateNumbers ) {
-					break;
+					temp           = array[counter];
+					array[counter] = array[index];
+					array[index]   = temp;
 				}
 
-				for ( var n = 0; n < array.length; n++ ) {
-					if ( i == n ) {
-						continue;
-					}
+				return array;
+			},
 
-					if ( array.indexOf( array[n] ) != n ) {
-						duplicateNumbers = true;
-						this.errors.push( 'Please enter 4 different numbers.' );
+			generateNumber: function() {
+				var numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
+				var slicedArray  = this.shuffle( numbersArray ).slice( 0, 4 );
+
+				return slicedArray.join( '' );
+			},
+
+			gameEnded: function() {
+				if ( this.success || this.failure ) {
+					this.guess = '';
+					return true;
+				}
+			},
+
+			containsNaNs: function( array ) {
+				var numbersOnly = true;
+
+				for ( var i = 0; i < array.length; i++ ) {
+					if ( isNaN( array[i] ) ) {
+						this.errors.push( 'Please enter numbers only.' );
+						numbersOnly = false;
 						break;
 					}
 				}
-			}
 
-			return duplicateNumbers;
-		},
+				return ! numbersOnly;
+			},
 
-		invalidGuessLength: function() {
-			if ( this.guess.length != 4 ) {
-				this.errors.push( 'Please enter 4 numbers.' );
+			duplicates: function( array ) {
+				var duplicateNumbers = false;
 
-				return true;
-			}
-		},
+				for ( var i = 0; i < array.length; i++ ) {
+					if ( duplicateNumbers ) {
+						break;
+					}
 
-		invalidGuessNumber: function( array ) {
-			if ( array.indexOf( '0' ) != -1 ) {
-				this.errors.push( 'Please enter numbers from 1 to 9 only.' );
+					for ( var n = 0; n < array.length; n++ ) {
+						if ( i == n ) {
+							continue;
+						}
 
-				return true;
-			}
-		},
-
-		guessCheck: function( array ) {
-			var cows  = 0;
-			var bulls = 0;
-
-			for ( var j = 0; j < array.length; j++ ) {
-				var numberPosition = this.numberSplit.indexOf( array[j] );
-
-				if ( numberPosition === -1 ) {
-					continue;
+						if ( array.indexOf( array[n] ) != n ) {
+							duplicateNumbers = true;
+							this.errors.push( 'Please enter 4 different numbers.' );
+							break;
+						}
+					}
 				}
 
-				if ( array.indexOf( array[j] ) === numberPosition ) {
-					bulls++;
-					continue;
+				return duplicateNumbers;
+			},
+
+			invalidGuessLength: function() {
+				if ( this.guess.length != 4 ) {
+					this.errors.push( 'Please enter 4 numbers.' );
+
+					return true;
+				}
+			},
+
+			invalidGuessNumber: function( array ) {
+				if ( array.indexOf( '0' ) != -1 ) {
+					this.errors.push( 'Please enter numbers from 1 to 9 only.' );
+
+					return true;
+				}
+			},
+
+			guessCheck: function( array ) {
+				var cows  = 0;
+				var bulls = 0;
+
+				for ( var j = 0; j < array.length; j++ ) {
+					var numberPosition = this.numberSplit.indexOf( array[j] );
+
+					if ( numberPosition === -1 ) {
+						continue;
+					}
+
+					if ( array.indexOf( array[j] ) === numberPosition ) {
+						bulls++;
+						continue;
+					}
+
+					cows++;
 				}
 
-				cows++;
-			}
+				if ( bulls === 4 ) {
+					this.success      = true;
+					this.disableInput = true;
+					return;
+				}
 
-			if ( bulls === 4 ) {
-				this.success      = true;
-				this.disableInput = true;
-				return;
-			}
+				this.attempts.push( {
+					guess : this.guess,
+					cows  : cows,
+					bulls : bulls
+				} );
 
-			this.attempts.push( {
-				guess : this.guess,
-				cows  : cows,
-				bulls : bulls
-			} );
+				this.remaining--;
 
-			this.remaining--;
+				if ( this.remaining === 0 ) {
+					this.failure      = true;
+					this.disableInput = true;
+				}
+			},
 
-			if ( this.remaining === 0 ) {
-				this.failure      = true;
-				this.disableInput = true;
+			validation: function( e ) {
+				e.preventDefault();
+
+				this.errors = [];
+
+				var guessArray  = this.guess.split( '' );
+				var validGuess  = true;
+				var validations = [
+					this.gameEnded(),
+					this.containsNaNs( guessArray ),
+					this.duplicates( guessArray ),
+					this.invalidGuessLength(),
+					this.invalidGuessNumber( guessArray )
+				];
+
+				for ( var i = 0; i < validations.length; i++ ) {
+					if ( validations[i] === true ) {
+						validGuess = false;
+					}
+				}
+
+				if ( ! validGuess ) {
+					return;
+				}
+
+				this.guessCheck( guessArray );
+
+				this.guess = '';
 			}
 		},
 
-		validation: function( e ) {
-			e.preventDefault();
-
-			this.errors = [];
-
-			var guessArray  = this.guess.split( '' );
-			var validGuess  = true;
-			var validations = [
-				this.gameEnded(),
-				this.containsNaNs( guessArray ),
-				this.duplicates( guessArray ),
-				this.invalidGuessLength(),
-				this.invalidGuessNumber( guessArray )
-			];
-
-			for ( var i = 0; i < validations.length; i++ ) {
-				if ( validations[i] === true ) {
-					validGuess = false;
-				}
-			}
-
-			if ( ! validGuess ) {
-				return;
-			}
-
-			this.guessCheck( guessArray );
-
-			this.guess = '';
+		created: function() {
+			this.theNumber   = this.generateNumber();
+			this.numberSplit = this.theNumber.split( '' );
+			this.remaining   = this.maxAttempts;
 		}
-	},
-
-	ready: function() {
-		this.theNumber   = this.generateNumber();
-		this.numberSplit = this.theNumber.split( '' );
-		this.remaining   = this.maxAttempts;
-
-		this.$els.guess.focus();
-	}
-	
-});
+		
+	} );
+} )();
