@@ -6,9 +6,9 @@
 				el.focus()
 			} );
 		}
-	});
+	} );
 
-	new Vue({
+	new Vue( {
 
 		el: '#cows-bulls',
 
