@@ -36,7 +36,7 @@
 			errors: []
 		},
 
-		validate: function(attrs) {
+		validate: function() {
 			var $guessErrors = $('.guess-errors span');
 			var guessArray   = this.get('number').split( '' );
 			var validGuess   = true;
