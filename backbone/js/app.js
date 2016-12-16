@@ -2,7 +2,7 @@
 
 	var numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
 	var slicedArray  = _.shuffle( numbersArray ).slice( 0, 4 );
-	var theNumber    = '1234';
+	var theNumber    = slicedArray.join( '' );
 	var numberSplit  = theNumber.split( '' );
 	var remaining    = 15;
 	var disableInput = false;
