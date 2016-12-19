@@ -7,11 +7,23 @@
 	var remaining    = 15;
 	var disableInput = false;
 
-	$(document).ready(function() {
-		var $guessInput = $('#guess-form').find(':text');
-		$guessInput.focus();
+	var GuessFormView = Backbone.View.extend({
+		el: $('#cows-bulls'),
+		initialize: function() {
+			this.template = _.template( $('#guess-form').html() );
+			this.render();
+		},
+		render: function() {
+			this.$el.html( this.template );
+			this.$el.find("#guess-form :text").focus();
+			return this;
+		},
+		events: {
+			'submit #guess-form': 'checkGuess'
+		},
+		checkGuess: function(event) {
+			var $guessInput = this.$el.find('#guess-form :text');
 
-		$('#guess-form').on('submit', function(event) {
 			event.preventDefault();
 
 			var guess = new Guess({
@@ -25,8 +37,10 @@
 			$guessInput.val('');
 
 			guesses.add( guess );
-		});
+		}
 	});
+
+	var guessFormView = new GuessFormView();
 
 	var Guess = Backbone.Model.extend({
 		defaults: {
@@ -159,7 +173,7 @@
 		model: new Guess(),
 		tagName: 'li',
 		initialize: function() {
-			this.template = _.template( $('.guess-template').html() );
+			this.template = _.template( $('#guess-template').html() );
 		},
 		render: function() {
 			this.$el.html( this.template( this.model.toJSON() ) );
