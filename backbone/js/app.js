@@ -9,8 +9,8 @@
 		},
 
 		validate: function() {
-			var $guessErrors = $('.guess-errors span');
-			var guessArray   = this.get('number').split( '' );
+			var $guessErrors = $( '.guess-errors span' );
+			var guessArray   = this.get( 'number' ).split( '' );
 			var validGuess   = true;
 			var validations  = [
 				this.containsNaNs( guessArray ),
@@ -28,7 +28,7 @@
 			$guessErrors.empty();
 
 			if ( ! validGuess ) {
-				$guessErrors.text(this.get('errors')[0]);
+				$guessErrors.text( this.get( 'errors' )[0] );
 				return true;
 			}
 
@@ -40,7 +40,7 @@
 
 			for ( var i = 0; i < array.length; i++ ) {
 				if ( isNaN( array[i] ) ) {
-					this.set('errors', _.union(this.get('errors'), ['Please enter numbers only.']));
+					this.set( 'errors', _.union( this.get( 'errors' ), ['Please enter numbers only.'] ) );
 					numbersOnly = false;
 					break;
 				}
@@ -64,7 +64,7 @@
 
 					if ( array.indexOf( array[n] ) != n ) {
 						duplicateNumbers = true;
-						this.set('errors', _.union(this.get('errors'), ['Please enter 4 different numbers.']));
+						this.set( 'errors', _.union( this.get( 'errors' ), ['Please enter 4 different numbers.'] ) );
 						break;
 					}
 				}
@@ -74,8 +74,8 @@
 		},
 
 		invalidGuessLength: function() {
-			if ( this.get('number').length != 4 ) {
-				this.set('errors', _.union(this.get('errors'), ['Please enter 4 numbers.']));
+			if ( this.get( 'number' ).length != 4 ) {
+				this.set( 'errors', _.union( this.get( 'errors' ), ['Please enter 4 numbers.'] ) );
 
 				return true;
 			}
@@ -83,7 +83,7 @@
 
 		invalidGuessNumber: function( array ) {
 			if ( array.indexOf( '0' ) != -1 ) {
-				this.set('errors', _.union(this.get('errors'), ['Please enter numbers from 1 to 9 only.']));
+				this.set( 'errors', _.union( this.get( 'errors' ), ['Please enter numbers from 1 to 9 only.'] ) );
 
 				return true;
 			}
@@ -108,8 +108,8 @@
 				cows++;
 			}
 
-			this.set('cows', cows);
-			this.set('bulls', bulls);
+			this.set( 'cows', cows );
+			this.set( 'bulls', bulls );
 		},
 	});
 
@@ -119,7 +119,7 @@
 		tagName: 'li',
 
 		initialize: function() {
-			this.template = _.template( $('#guess-template').html() );
+			this.template = _.template( $( '#guess-template' ).html() );
 		},
 
 		render: function() {
@@ -154,17 +154,19 @@
 			this.remaining--;
 
 			if ( this.remaining <= 0 ) {
-				this.$('#guess-remaining span').text('0');
-				this.$('.failure').find('span').text(this.theNumber).end().show();
+				this.$( '#guess-remaining span' ).text( '0' );
+
+				this.$( '.failure span' ).text( this.theNumber ).parent().show();
+
 				this.gameOver();
+
 				return;
 			}
 
-			var guessCount = this.model.length;
-			var lastGuess  = this.model.at( guessCount - 1 );
+			var lastGuess = this.model.last();
 
-			if ( lastGuess.get('bulls') === 4 ) {
-				$('.success span').text(guessesView.theNumber).parent().show();
+			if ( lastGuess.get( 'bulls' ) === 4 ) {
+				this.$( '.success span' ).text( this.theNumber ).parent().show();
 				this.gameOver();
 				return;
 			}
@@ -173,20 +175,20 @@
 		},
 
 		gameOver: function() {
-			this.$('#guess-input, #guess-submit').prop('disabled', true);
+			this.$( '#guess-input, #guess-submit' ).prop( 'disabled', true );
 		},
 
 		render: function() {
 			var self = this;
 
-			this.$('[type="text"]').focus();
-			this.$('#guess-remaining span').text( this.remaining );
+			this.$( '[type="text"]' ).focus();
+			this.$( '#guess-remaining span' ).text( this.remaining );
 
-			this.$el.find('.guess-list-items').html('');
+			this.$el.find( '.guess-list-items' ).html( '' );
 
-			_.each(this.model.toArray(), function(guess) {
-				self.$el.find('.guess-list-items').append( ( new GuessView( { model: guess } ) ).render().$el );
-			});
+			_.each( this.model.toArray(), function( guess ) {
+				self.$el.find( '.guess-list-items' ).append( ( new GuessView( { model: guess } ) ).render().$el );
+			} );
 
 			$('#guess-remaining span').text(this.remaining);
 			return this;
@@ -196,8 +198,8 @@
 			'submit #guess-form': 'checkGuess'
 		},
 
-		checkGuess: function(event) {
-			var $guessInput = this.$el.find('#guess-form :text');
+		checkGuess: function( event ) {
+			var $guessInput = this.$el.find( '#guess-form :text' );
 
 			event.preventDefault();
 
@@ -209,7 +211,7 @@
 				return;
 			}
 
-			$guessInput.val('');
+			$guessInput.val( '' );
 
 			guesses.add( guess );
 		}
