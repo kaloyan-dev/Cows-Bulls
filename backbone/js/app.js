@@ -9,7 +9,6 @@
 		},
 
 		validate: function() {
-			var $guessErrors = $( '.guess-errors span' );
 			var guessArray   = this.get( 'number' ).split( '' );
 			var validGuess   = true;
 			var validations  = [
@@ -22,14 +21,12 @@
 			for ( var i = 0; i < validations.length; i++ ) {
 				if ( validations[i] === true ) {
 					validGuess = false;
+					break;
 				}
 			}
 
-			$guessErrors.empty();
-
 			if ( ! validGuess ) {
-				$guessErrors.text( this.get( 'errors' )[0] );
-				return true;
+				return this.get( 'errors' )[0];
 			}
 
 			this.guessCheck( guessArray );
@@ -199,7 +196,10 @@
 		},
 
 		checkGuess: function( event ) {
-			var $guessInput = this.$el.find( '#guess-form :text' );
+			var $guessInput  = this.$( '#guess-form :text' );
+			var $guessErrors = this.$( '#guess-errors span' );
+
+			$guessErrors.empty();
 
 			event.preventDefault();
 
@@ -208,6 +208,7 @@
 			});
 
 			if ( ! guess.isValid() ) {
+				$guessErrors.text( guess.validationError );
 				return;
 			}
 
