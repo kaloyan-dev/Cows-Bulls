@@ -152,7 +152,6 @@
 
 			if ( this.remaining <= 0 ) {
 				this.$( '#guess-remaining span' ).text( '0' );
-
 				this.$( '.failure span' ).text( this.theNumber ).parent().show();
 
 				this.gameOver();
@@ -164,7 +163,9 @@
 
 			if ( lastGuess.get( 'bulls' ) === 4 ) {
 				this.$( '.success span' ).text( this.theNumber ).parent().show();
+
 				this.gameOver();
+
 				return;
 			}
 
@@ -181,10 +182,10 @@
 			this.$( '[type="text"]' ).focus();
 			this.$( '#guess-remaining span' ).text( this.remaining );
 
-			this.$el.find( '.guess-list-items' ).html( '' );
+			this.$( '.guess-list-items' ).html( '' );
 
 			_.each( this.model.toArray(), function( guess ) {
-				self.$el.find( '.guess-list-items' ).append( ( new GuessView( { model: guess } ) ).render().$el );
+				self.$( '.guess-list-items' ).append( ( new GuessView( { model: guess } ) ).render().$el );
 			} );
 
 			$('#guess-remaining span').text(this.remaining);
