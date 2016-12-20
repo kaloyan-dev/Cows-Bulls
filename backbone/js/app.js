@@ -1,16 +1,10 @@
 ;( function() {
 
-	var numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
-	var slicedArray  = _.shuffle( numbersArray ).slice( 0, 4 );
-	var theNumber    = slicedArray.join( '' );
-	var numberSplit  = theNumber.split( '' );
-	var disableInput = false;
-
 	var Guess = Backbone.Model.extend({
 		defaults: {
 			number: '',
-			cows: 0,
-			bulls: 0,
+			cows  : 0,
+			bulls : 0,
 			errors: []
 		},
 
@@ -100,7 +94,7 @@
 			var bulls = 0;
 
 			for ( var j = 0; j < array.length; j++ ) {
-				var numberPosition = numberSplit.indexOf( array[j] );
+				var numberPosition = guessesView.numberSplit.indexOf( array[j] );
 
 				if ( numberPosition === -1 ) {
 					continue;
@@ -114,14 +108,6 @@
 				cows++;
 			}
 
-			if ( bulls === 4 ) {
-				$('.success span').text(theNumber).parent().show();
-				setTimeout(function() {
-					$('.guess-list-items li:last').remove();
-				}, 0);
-				return;
-			}
-
 			this.set('cows', cows);
 			this.set('bulls', bulls);
 		},
@@ -129,10 +115,13 @@
 
 	var GuessView = Backbone.View.extend({
 		model: new Guess(),
+
 		tagName: 'li',
+
 		initialize: function() {
 			this.template = _.template( $('#guess-template').html() );
 		},
+
 		render: function() {
 			this.$el.html( this.template( this.model.toJSON() ) );
 			return this;
@@ -145,27 +134,52 @@
 
 	var GuessesView = Backbone.View.extend({
 		model: guesses,
+
 		el: $('#cows-bulls'),
+
 		initialize: function() {
 			var self = this;
-			this.remaining = 15;
+
+			this.numbersArray = [ 2, 1, 4, 9, 5, 7, 8, 3, 6 ];
+			this.slicedArray  = _.shuffle( this.numbersArray ).slice( 0, 4 );
+			this.theNumber    = this.slicedArray.join( '' );
+			this.numberSplit  = this.theNumber.split( '' );
+			this.remaining    = 15;
+
 			this.model.on('add', this.decreaseRemaining, this);
 			this.render();
 		},
+
 		decreaseRemaining: function() {
 			this.remaining--;
 
 			if ( this.remaining <= 0 ) {
 				this.$('#guess-remaining span').text('0');
-				this.$('.failure').find('span').text(theNumber).end().show();
+				this.$('.failure').find('span').text(this.theNumber).end().show();
+				this.gameOver();
+				return;
+			}
+
+			var guessCount = this.model.length;
+			var lastGuess  = this.model.at( guessCount - 1 );
+
+			if ( lastGuess.get('bulls') === 4 ) {
+				$('.success span').text(guessesView.theNumber).parent().show();
+				this.gameOver();
 				return;
 			}
 
 			this.render();
 		},
+
+		gameOver: function() {
+			this.$('#guess-input, #guess-submit').prop('disabled', true);
+		},
+
 		render: function() {
 			var self = this;
 
+			this.$('[type="text"]').focus();
 			this.$('#guess-remaining span').text( this.remaining );
 
 			this.$el.find('.guess-list-items').html('');
@@ -177,9 +191,11 @@
 			$('#guess-remaining span').text(this.remaining);
 			return this;
 		},
+
 		events: {
 			'submit #guess-form': 'checkGuess'
 		},
+
 		checkGuess: function(event) {
 			var $guessInput = this.$el.find('#guess-form :text');
 
