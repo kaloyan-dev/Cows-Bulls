@@ -147,7 +147,7 @@
 			this.render();
 		},
 
-		decreaseRemaining: function() {
+		decreaseRemaining: function( guess ) {
 			this.remaining--;
 
 			if ( this.remaining <= 0 ) {
@@ -159,9 +159,7 @@
 				return;
 			}
 
-			var lastGuess = this.model.last();
-
-			if ( lastGuess.get( 'bulls' ) === 4 ) {
+			if ( guess.get( 'bulls' ) === 4 ) {
 				this.$( '.success span' ).text( this.theNumber ).parent().show();
 
 				this.gameOver();
