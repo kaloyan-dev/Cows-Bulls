@@ -7,16 +7,14 @@
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<div id="cows-bulls" class="form-wrapper"></div>
-
-	<script type="text/template" id="guess-form">
+	<div id="cows-bulls" class="form-wrapper">
 		<form id="guess-form">
 			<input type="text" maxlength="4" value="" />
 			<input type="submit" value="Check" />
 		</form>
 
 		<div id="guess-list" class="guess-list">
-			<p id="guess-remaining" class="guess-remaining">Remaining attempts: <span>15</span></p>
+			<p id="guess-remaining" class="guess-remaining">Remaining attempts: <span></span></p>
 			<p class="guess-errors"><span></span></p>
 			<ol class="guess-list-items"></ol>
 			<ol class="messages">
@@ -24,7 +22,8 @@
 				<li class="failure">Sorry, the number was <span></span>.</li>
 			</ol>
 		</div>
-	</script>
+	</div>
+
 
 	<script type="text/template" id="guess-template">
 		<span><%= number %></span> &#8211; <span><%= cows %></span> cows, <span><%= bulls %></span> bulls

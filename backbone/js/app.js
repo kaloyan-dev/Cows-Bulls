@@ -4,43 +4,7 @@
 	var slicedArray  = _.shuffle( numbersArray ).slice( 0, 4 );
 	var theNumber    = slicedArray.join( '' );
 	var numberSplit  = theNumber.split( '' );
-	var remaining    = 15;
 	var disableInput = false;
-
-	var GuessFormView = Backbone.View.extend({
-		el: $('#cows-bulls'),
-		initialize: function() {
-			this.template = _.template( $('#guess-form').html() );
-			this.render();
-		},
-		render: function() {
-			this.$el.html( this.template );
-			this.$el.find("#guess-form :text").focus();
-			return this;
-		},
-		events: {
-			'submit #guess-form': 'checkGuess'
-		},
-		checkGuess: function(event) {
-			var $guessInput = this.$el.find('#guess-form :text');
-
-			event.preventDefault();
-
-			var guess = new Guess({
-				number: $guessInput.val()
-			});
-
-			if ( ! guess.isValid() ) {
-				return;
-			}
-
-			$guessInput.val('');
-
-			guesses.add( guess );
-		}
-	});
-
-	var guessFormView = new GuessFormView();
 
 	var Guess = Backbone.Model.extend({
 		defaults: {
@@ -160,12 +124,6 @@
 
 			this.set('cows', cows);
 			this.set('bulls', bulls);
-
-			remaining--;
-
-			if ( remaining === 0 ) {
-				$('.failure span').text(theNumber).parent().show();
-			}
 		},
 	});
 
@@ -187,18 +145,57 @@
 
 	var GuessesView = Backbone.View.extend({
 		model: guesses,
-		el: $('.guess-list-items'),
+		el: $('#cows-bulls'),
 		initialize: function() {
 			var self = this;
-			this.model.on('add', this.render, this);
+			this.remaining = 15;
+			this.model.on('add', this.decreaseRemaining, this);
+			this.render();
+		},
+		decreaseRemaining: function() {
+			this.remaining--;
+
+			if ( this.remaining <= 0 ) {
+				this.$('#guess-remaining span').text('0');
+				this.$('.failure').find('span').text(theNumber).end().show();
+				return;
+			}
+
+			this.render();
 		},
 		render: function() {
 			var self = this;
-			this.$el.html('');
+
+			this.$('#guess-remaining span').text( this.remaining );
+
+			this.$el.find('.guess-list-items').html('');
+
 			_.each(this.model.toArray(), function(guess) {
-				self.$el.append( ( new GuessView( { model: guess } ) ).render().$el );
+				self.$el.find('.guess-list-items').append( ( new GuessView( { model: guess } ) ).render().$el );
 			});
+
+			$('#guess-remaining span').text(this.remaining);
 			return this;
+		},
+		events: {
+			'submit #guess-form': 'checkGuess'
+		},
+		checkGuess: function(event) {
+			var $guessInput = this.$el.find('#guess-form :text');
+
+			event.preventDefault();
+
+			var guess = new Guess({
+				number: $guessInput.val()
+			});
+
+			if ( ! guess.isValid() ) {
+				return;
+			}
+
+			$guessInput.val('');
+
+			guesses.add( guess );
 		}
 	});
 
