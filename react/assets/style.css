@@ -69,6 +69,3 @@ input[type="submit"] {
 	color: #35495e;
 	font-weight: bold;
 }
-
-.success,
-.failure { display: none; }

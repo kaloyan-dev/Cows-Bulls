@@ -1,7 +1,7 @@
 import React from 'react';
 
 class GuessForm extends React.Component {
-	componentDidMount(){
+	componentDidMount() {
 		this.guessInput.focus();
 	}
 
