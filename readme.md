@@ -1,7 +1,7 @@
 # Cows & Bulls
 
 ## Intro
-A variation of the [Bulls and Cows](https://en.wikipedia.org/wiki/Bulls_and_Cows) game build with Vue.js. In this version you are trying to guess a randomly generated number instead of playing against another player.
+An implementation of the [Bulls and Cows](https://en.wikipedia.org/wiki/Bulls_and_Cows) game built with different JavaScript libraries. In this version you are trying to guess a randomly generated number instead of playing against another player.
 
 ## Rules
 A 4-digit secret number is generated once you start the game. The digits will be all different and will be between 1 and 9.
