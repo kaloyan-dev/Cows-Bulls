@@ -9,8 +9,8 @@
     "webpack": "1.15.0"
   },
   "dependencies": {
-    "react": "15.6.2",
-    "react-dom": "15.6.2"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "scripts": {
     "dev": "./node_modules/.bin/webpack --watch"
